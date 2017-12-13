@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 <title>JX3.BiuBiuBiu</title>
 <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.css" />
+<link rel="stylesheet" href="css/jx3.css" />
 <script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
 <script src="jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script src="js/jx3.js"></script>
@@ -44,51 +45,58 @@
 </head
 <body onload="load()" >
 <div>
-    <div class="a1" id="cdtime">调息时间</div>
-    <div class="a1" id="time2">提示区域</div>
-	<div id="gcdprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
-	<div id="singprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
-	<div>
-		<div id="btn1" style="float:left;margin:0 5px auto auto;">
-			<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
-				<img src="./123.png" alt="Biu~" style="width:100%"></img>
-			</button>
-		</div>
-		<div id="btn2">
-			<button class="skillbtn" type="button" onclick="doskill(skill2)" >
-				<img src="./123.png" alt="Biubiu~" style="width:100%"></img>
-			</button>
+	<div class="top">顶部预留区域</div>
+	<div class="left_top">左上预留区域</div>
+	<div class="center_top">中上预留区域
+		<div></div>
+	</div>
+	<div class="right_top">右上预留区域</div>
+	<div class="left">左预留区域</div>	
+	<div class="center">中预留区域</div>
+	<div class="right">右预留区域</div>	
+	<div class="bottom">中预留区域
+		<div class="a1" id="cdtime">调息时间</div>
+	    <div class="a1" id="time2">提示区域</div>
+		<div id="gcdprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
+		<div id="singprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
+		<div>
+			<div id="btn1" style="float:left;margin:0 5px auto auto;">
+				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
+					<img src="./123.png" id="skill_img_1" alt="Biu~" style="width:100%"></img>
+				</button>
+			</div>
+			<div id="btn2">
+				<button class="skillbtn" type="button" onclick="Update()" >
+					<img src="./123.png" id="skill_img_2" alt="Biubiu~" style="width:100%"></img>
+				</button>
+			</div>
+			<div id="btn3">
+				<button class="skillbtn" type="button" onclick="TimeToDoSing()" >
+					<img src="" id="skill_img_3" alt="Test" style="width:100%"></img>
+				</button>
+			</div>
 		</div>
 	</div>
+    
 </div>
     <footer>
         <!-- script -->
 		<script type="text/javascript">
+			/*UI上的变量*/
+			var txt_cdtime = "调息时间……";
+			var txt_time2 = "提示区域……";
+			var value_gcdbar = 50;
+			var value_singbar = 50;
+			var alt_skill_img_1 = "Biu~";
+			var alt_skill_img_2 = "Biubiu~";			
+			
 			var c=0
 			var t1,t2;
 			var t;		//主Update线程
 			var gcdtime=1.5;	//gcd
 			var cur_cd_t;		//当前调息时间
 			
-			function getAll() {
-            var objs = document.all;
-            var length1;
-            for (var i = 0; i < objs.length; i++) {
-                var obj = objs[i].tagName;
-                if (obj == "body" || obj == "BODY") {
-                    length1 = i+1;
-                    break;
-                }
-            }
-            var b_objs = new Array();
-            for (var j = length1; j < objs.length; j++) {
-                b_objs.push(objs[j]);
-            }
-            	return b_objs;
-        	}
-			var objs = getAll();
-			console.log(objs);
-			console.log($("*").text());
+			
 			//Player(id, name, maxlife, maxmana, skilllist)
 			var player = new Player(0, "死秃子", 100, 100, null);
 			var target = new Player(0, "木桩", 100, 100, null);
@@ -97,14 +105,47 @@
 			
 			//(id, name, cdtime, singtime, mindamage, maxdamage, crit)
 			var skill1=new Skill(1, "技能一", 1.5, 0, 83, 100, 0);
-			var skill2=new Skill(1, "技能二", 3, 0, 83, 100, 0);
+			var skill2=new Skill(1, "技能二", 3, 0, 10, 11, 0);
 			var ifstart=false;
-			console.log(skill1.name+"\tCD:"+skill1.cdtime);	
-			console.log(skill2.name+"\tCD:"+skill2.cdtime);
+			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
+			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
 			 
+			$(document).ready(load())
 			function load()
 			{
+				$("#cdtime").text(txt_cdtime);
+				$("#time2").text(txt_time2);
+				$(function() {
+					$( "#gcdprogressbar" ).progressbar({
+						value: value_gcdbar
+					}); 
+				});
+				$(function() {
+					$( "#singprogressbar" ).progressbar({
+						value: value_singbar
+					});
+				});
 			}
+			
+			function TimeToDoSing()
+		    {
+		    	 
+		        if (value_gcdbar >= 100)
+		        {
+		        	value_gcdbar = 0;
+		        	t2=setTimeout("TimeToDoSing()",40);
+		            //clearTimeout(t2);
+		            //return;
+		        }
+		        else
+		        {
+			        value_gcdbar = value_gcdbar + 1;
+			        t2=setTimeout("TimeToDoSing()",40);
+			    }
+			    console.log(value_gcdbar);
+		    }
+			
+			
 		</script>
     </footer>
 </body>

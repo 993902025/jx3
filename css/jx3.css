@@ -1,0 +1,104 @@
+.top{
+	position: absolute;
+	top: 5px;  
+	left: 5px; 
+	right: 5px;
+	height: 0;
+	margin: 5px 5px;
+	height: 20px;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+}
+
+.left_top{
+	position: absolute;
+	top: 25px; 
+	left: 5px;
+	bottom: 50px;
+	margin: 5px 5px;
+	width:200px;
+	height: 150px;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+}
+
+.center_top{
+	position: absolute;	
+	top: 30px; 
+	left: 200px; 
+	right: 200px; 
+	height: 150px;
+	margin: auto;
+	width:60%;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+	overflow: hidden;
+}
+
+.right_top{
+	position: absolute;
+	top: 25px; 
+	right: 5px;
+	bottom: 50px;
+	margin: 5px 5px;
+	width:200px;
+	height: 150px;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+}
+
+.left{
+	position: absolute; 
+	top: 10%;
+	left: 5px;
+	bottom: 5%;
+	margin: 5px 5px;
+	width: 200px;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+}
+
+.center{
+	position: absolute;	
+	top: 10%;
+	left: 200px; 
+	right: 200px; 
+	bottom: 5%;
+	margin: auto;
+	width:60%;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+	overflow: hidden;
+}
+
+.right{
+	position: absolute;
+	top: 10%;
+	right: 5px;
+	bottom: 5%;
+	margin: 5px 5px;
+	width:200px;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+	overflow: hidden;
+}
+
+.bottom{
+	position: absolute;	
+	left: 200px; 
+	right: 200px; 
+	bottom: 5%;
+	margin: auto;
+	width:60%;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(255, 255, 255,0.1);
+	overflow: hidden;
+}

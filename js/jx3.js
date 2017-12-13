@@ -11,8 +11,8 @@
         }
         else
         {
-            curcd=curcd - 0.1;
-            ss.t_docd=setTimeout("timedCount(ss)",100);
+            cur_cd_t=cur_cd_t - 0.1;
+            ss.t_docd=setTimeout("ThreadDoCd(ss)",100);
             $("div#cdtime").text(Math.abs(ss.cdtime - cur_cd_t).toFixed(1));
         }   	
 		$( "#gcdprogressbar" ).progressbar({
@@ -73,7 +73,8 @@
 		//计算返回伤害
 		this.dodamage = function(obj)
 		{
-			var vsh = Math.floor(Math.random()*(obj.max-obj.min+1)+obj.min);
+			var vsh = Math.floor(Math.random()*(obj.maxdamage-obj.mindamage+1)+obj.mindamage);
+			console.log("dodamage():"+ vsh);
 			return vsh;				
 		}
 		
@@ -81,10 +82,10 @@
 		this.dosing = function(obj)
 		{			
 			obj.DoCd(obj);
-			var _dmg = dodamage();
-			console.log("dosing return:" + dmg);
+			var _dmg = obj.dodamage(obj);
+			console.log("dosing return:" + _dmg);
 			
-			return dmg;	
+			return _dmg;	
 			//然后用这个去调读条UI的函数
 		}
 				
@@ -99,10 +100,10 @@
 					console.log("obj.distance=" + obj.distance)
 					if ( obj.distance > (player.vector2[0] - target.vector2[0]) )	//判断技能的当前释放距离distance是否合法
 					{
-						if (obj.dosing(obj))
+						if ( dmg = obj.dosing(obj))
 						{
 							obj.DoCd(obj);
-							
+							return dmg;
 						}
 						else
 						{
@@ -148,8 +149,7 @@
 			
 		}
 				
-    }
-	
+    }	
     
     function DoSkill(skill)
     {
@@ -159,9 +159,18 @@
 			var shvalue=skill.domain(skill,player,target);
 			var nowtime = new Date();
 			console.log(nowtime);
-            console.log("使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue);
-			var outstr = "使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue;
-			$("div#time2").text(outstr);			
+			if (shvalue > 0)
+			{
+	            console.log("使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue);
+				var outstr = "使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue;
+				$("div#time2").text(outstr);
+			}
+			else
+			{
+				var outstr = "使用了技能:"+skill.name+"obj.curcd > 0";
+				$("div#time2").text(outstr);
+				
+			}
         }
         else
         {
@@ -179,16 +188,15 @@
 			doskill(skill1);
 		}
 	});
-
 	
 	//<!--进度条-->
-	$(function() {
+	/**$(function() {
 		$( "#gcdprogressbar" ).progressbar({
 			value: 100
 		});
 	});
           
-	  /**<!-- else if ( target.is( "#colorButton" ) ) {
+	  <!-- else if ( target.is( "#colorButton" ) ) {
         progressbarValue.css({
           "background": '#' + Math.floor( Math.random() * 16777215 ).toString( 16 )
         });
@@ -197,23 +205,27 @@
         progressbar.progressbar( "option", "value", false );
       } -->**/
 
-  
-	$(function() {
-		$( "#singprogressbar" ).progressbar({
-			value: 100
-		});
-	});
-  
+	function Start()
+	{
+		if (gameSwitch)
+    	{
+    		Update();
+    		console.log("开始游戏!")
+    		return;
+    	}
+    	else
+    	{
+    		clearTimeout(t);
+    		console.log("停止/暂停游戏!")
+    		return;
+    	}
+	}
+  	var gameSwitch = false;
 	//
 	//第一阶段将所有UI元素的数据更新并刷新UI
-	/*function Update()
-    {
-    	console.log($("*").text());
-    	if ( action )
-    	{
-    		
-    		action == null;
-    	}
-    	
-    	//t=setTimeout("Update()",40);
-    }*/
+	function Update()
+    {    	
+    	t=setTimeout("Update()",40);
+    }
+    
+	
