@@ -12,16 +12,20 @@
 <style>
  .a1{
 	width:50%;
-    margin:5px 10px;
+    margin:5px auto;
     text-align:center;
  }
  .skillbtn{
-	margin:auto;
-	padding:0;
+	margin: 0 auto;
+	padding:1px;
 	width:50px;
 	height:50px;
-	max-width:50px;
-	max-height:50px;
+	min-width:30px;
+	min-height:30px;
+ }
+ .skillBtnImg{
+ 	width:100%;
+ 	height: 100%;
  }
  .progress-label {
     position: absolute;
@@ -40,6 +44,12 @@
   .ui-widget-header{
 	background:rgba(0, 119, 51,0.6);
    }
+   
+   .skillbtnH{
+   	border: 1px dashed;
+   	height: 50px;
+   	text-align: center;
+   }
 </style>
 
 </head
@@ -54,25 +64,51 @@
 	<div class="left">左预留区域</div>	
 	<div class="center">中预留区域</div>
 	<div class="right">右预留区域</div>	
-	<div class="bottom">中预留区域
+	<div class="bottom">
+		<span>技能区域</span>
 		<div class="a1" id="cdtime">调息时间</div>
 	    <div class="a1" id="time2">提示区域</div>
-		<div id="gcdprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
-		<div id="singprogressbar" style="height:10px;width:50%;margin:10px 20px 20px;"></div>
-		<div>
-			<div id="btn1" style="float:left;margin:0 5px auto auto;">
-				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
-					<img src="./123.png" id="skill_img_1" alt="Biu~" style="width:100%"></img>
+		<div class="a1" id="gcdprogressbar" style="height:10px;"></div>
+		<div class="a1" id="singprogressbar" style="height:10px;"></div>
+		
+		<div class="skillbtnH">
+			<div class="skillbtn" id="btn1" style="float: left;">
+				<button class="skillbtn" type="button" onclick="DoSkill(skill1)"; >
+					<img class="skillBtnImg" src="123.png" id="skill_img_1" alt="Biu~"/>
 				</button>
 			</div>
-			<div id="btn2">
+			<div class="skillbtn" id="btn2" style="float: left;">
 				<button class="skillbtn" type="button" onclick="Update()" >
-					<img src="./123.png" id="skill_img_2" alt="Biubiu~" style="width:100%"></img>
+					<img class="skillBtnImg" src="./123.png" id="skill_img_2" alt="Biubiu~" />
 				</button>
 			</div>
-			<div id="btn3">
-				<button class="skillbtn" type="button" onclick="TimeToDoSing()" >
-					<img src="" id="skill_img_3" alt="Test" style="width:100%"></img>
+			<div class="skillbtn" id="btn3" style="float: left;">
+				<button class="skillbtn" type="button" onclick="TimeToTest()" >
+					<span style="">1</span>
+					<img class="skillBtnImg" src="" id="skill_img_3" alt="test" ></img>
+				</button>
+			</div>
+		</div>
+		
+		<!--
+        	作者：offline
+        	时间：2017-12-13
+        	描述：第二行技能栏
+        -->
+		<div class="skillbtnH">
+			<div class="skillbtn" id="btn1" style="float: left;">
+				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
+					<img class="skillBtnImg" src="./123.png" id="skill_img_1" alt="Biu~" ></img>
+				</button>
+			</div>
+			<div class="skillbtn"  id="btn2" style="float: left;">
+				<button class="skillbtn" type="button" onclick="Update()" >
+					<img class="skillBtnImg" src="" id="skill_img_2" alt="Biubiu~" ></img>
+				</button>
+			</div>
+			<div class="skillbtn" id="btn3" style="float: left;">
+				<button class="skillbtn" type="button" onclick="TimeToTest()" >
+					<img class="skillBtnImg" src="" id="skill_img_3" alt="Test2" ></img>
 				</button>
 			</div>
 		</div>
@@ -127,20 +163,19 @@
 				});
 			}
 			
-			function TimeToDoSing()
-		    {
-		    	 
+			function TimeToTest()
+		    {	 
 		        if (value_gcdbar >= 100)
 		        {
-		        	value_gcdbar = 0;
-		        	t2=setTimeout("TimeToDoSing()",40);
-		            //clearTimeout(t2);
-		            //return;
+		        	<!--value_gcdbar = 0;-->
+		        	<!--t2=setTimeout("TimeToTest()",40);-->
+		            clearTimeout(t2);
+		            return;
 		        }
 		        else
 		        {
 			        value_gcdbar = value_gcdbar + 1;
-			        t2=setTimeout("TimeToDoSing()",40);
+			        t2=setTimeout("TimeToTest()",40);
 			    }
 			    console.log(value_gcdbar);
 		    }
