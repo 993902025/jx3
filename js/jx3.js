@@ -182,10 +182,10 @@
     //<!-->加载and测试函数</!-->
 	$(document).keydown(function(e){
 		if(e.which == 49) {
-			doskill(skill1);
+			DoSkill(skill1);
 		}
-		if(e.which == 81) {
-			doskill(skill1);
+		if(e.which == 50) {
+			DoSkill(skill2);
 		}
 	});
 	
@@ -224,7 +224,8 @@
 	//
 	//第一阶段将所有UI元素的数据更新并刷新UI
 	function Update()
-    {    	
+    {
+    	
     	t=setTimeout("Update()",40);
     }
     
