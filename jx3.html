@@ -120,7 +120,7 @@
 		
 		<div class="skillbtnH">
 			<div class="skillbtn" id="btn1" style="float: left;">
-				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
+				<button class="skillbtn" type="button" onclick="player.CastSkill(skill1, target)" >
 					<img class="skillBtnImg" src="img/sxlh.png" id="skill_img_1" alt="Biu~">
 					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.5);"></canvas>
 					</img>
@@ -128,7 +128,7 @@
 				</button>
 			</div>
 			<div class="skillbtn" id="btn2" style="float: left;">
-				<button class="skillbtn" type="button" onclick="Update()" >
+				<button class="skillbtn" type="button" onclick="player.CastSkill(skill2, target)" >
 					<img class="skillBtnImg" src="img/lyhx.png" id="skill_img_2" alt="Biubiu~" />		
 					<div class="btnnum">2</div>
 					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.6);"></canvas>
@@ -193,22 +193,16 @@
 			var alt_skill_img_1 = "Biu~";
 			var alt_skill_img_2 = "Biubiu~";			
 			
-			var c=0
-			var t1,t2;
-			var t;		//主Update线程
-			var cur_cd_t;		//当前cd
-			var cur_gcd_t;	//当前gcd
-			var cur_sing_t;
-			
 			//Player(id, name, maxlife, maxmana, skilllist)
 			var player = new Player(0, "死秃子", 100, 100, null);
 			var target = new Player(0, "木桩", 100, 100, null);
 			player.vector2 = new Array(0,0);
 			target.vector2 = new Array(0,0);
+			console.log(player.id + "\t" + player.name+"\t生命:"+ player.life + "\t内力:" + player.mana + "\t "  + "|");
 			
 			//(id, name, cdtime, singtime, mindamage, maxdamage, crit)
 			var skill1=new Skill(1, "技能一", 1.5, 0, 83, 100, 0);	//四象轮回
-			var skill2=new Skill(1, "技能二", 3, 0, 10, 11, 0);		//两仪化形
+			var skill2=new Skill(1, "技能二", 3, 1, 10, 11, 0);		//两仪化形
 			var ifstart=false;
 			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
 			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
