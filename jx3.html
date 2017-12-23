@@ -83,7 +83,26 @@
 </head
 <body onload="load()" class="gb">
 <div >
-	<div class="top">顶部预留区域</div>
+	</div>
+	<div class="leftbottom">		
+		<textarea class="textbox" id="textbox1" autocomplete="off">调试日志打印:
+		</textarea>
+	</div>
+    <div class="rightbottom" >
+		<div class="textbox"  autocomplete="off">
+			<p>111</p>
+			<p>222</p>
+		</div>
+	</div>
+    
+	<div class="top">顶部预留区域
+		<div class="" id="btn_start" style="float: left;">
+			<button class="" type="button" onclick="Start()" >
+				开始
+			</button>
+		</div>
+	
+	</div>
 	<div class="left_top">左上预留区域</div>
 	<div class="center_top">中上预留区域
 		<div></div>
@@ -102,18 +121,24 @@
 		<div class="skillbtnH">
 			<div class="skillbtn" id="btn1" style="float: left;">
 				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
-					<img class="skillBtnImg" src="img/sxlh.png" id="skill_img_1" alt="Biu~"></img>
+					<img class="skillBtnImg" src="img/sxlh.png" id="skill_img_1" alt="Biu~">
+					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.5);"></canvas>
+					</img>
 					<div class="btnnum">1</div>
 				</button>
 			</div>
 			<div class="skillbtn" id="btn2" style="float: left;">
 				<button class="skillbtn" type="button" onclick="Update()" >
-					<img class="skillBtnImg" src="img/lyhx.png" id="skill_img_2" alt="Biubiu~" />					
+					<img class="skillBtnImg" src="img/lyhx.png" id="skill_img_2" alt="Biubiu~" />		
+					<div class="btnnum">2</div>
+					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.6);"></canvas>
 				</button>
+				
 			</div>
 			<div class="skillbtn" id="btn3" style="float: left;">
 				<button class="skillbtn" type="button" onclick="TimeToTest()" >
 					<img class="skillBtnImg" src="img/tjwj.png" id="skill_img_3" alt="test" ></img>
+					<div class="btnnum">3</div>
 				</button>
 			</div>
 			<div class="skillbtn" id="btn1" style="float: left;">
@@ -155,8 +180,7 @@
 				</button>
 			</div>
 		</div>-->
-	</div>
-    
+	
 </div>
     <footer>
         <!-- script -->
@@ -172,9 +196,9 @@
 			var c=0
 			var t1,t2;
 			var t;		//主Update线程
-			var gcdtime=1.5;	//gcd
-			var cur_cd_t;		//当前调息时间
-			
+			var cur_cd_t;		//当前cd
+			var cur_gcd_t;	//当前gcd
+			var cur_sing_t;
 			
 			//Player(id, name, maxlife, maxmana, skilllist)
 			var player = new Player(0, "死秃子", 100, 100, null);
@@ -183,8 +207,8 @@
 			target.vector2 = new Array(0,0);
 			
 			//(id, name, cdtime, singtime, mindamage, maxdamage, crit)
-			var skill1=new Skill(1, "技能一", 1.5, 0, 83, 100, 0);
-			var skill2=new Skill(1, "技能二", 3, 0, 10, 11, 0);
+			var skill1=new Skill(1, "技能一", 1.5, 0, 83, 100, 0);	//四象轮回
+			var skill2=new Skill(1, "技能二", 3, 0, 10, 11, 0);		//两仪化形
 			var ifstart=false;
 			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
 			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
@@ -222,8 +246,6 @@
 			    }
 			    console.log(value_gcdbar);
 		    }
-			
-			
 		</script>
     </footer>
 </body>
