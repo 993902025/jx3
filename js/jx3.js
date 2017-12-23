@@ -1,4 +1,37 @@
-
+//global
+	//玩家移动状态
+	var moveStatus = 
+	{
+		free:0,
+		stand:1,
+		sit:3,
+		walk:4,
+		run:5,
+		jump:6	
+	}
+	//玩家施法状态
+	var castStatus = 
+	{
+		none:0,
+		sing:1,
+		gnis:2
+	}
+	
+	var debufflist = new Array();
+	
+	//
+	function DoGCd(s)
+    {
+    	$("#gcdprogressbar" ).progressbar({
+					value: (cur_gcd_t/player.gcdtime*100)
+				});
+		if (cur_gcd_t <= 0)
+		{
+			cur_gcd_t = 1500;
+		}
+		cur_gcd_t = cur_gcd_t - 40;
+    }
+	
     //cd计时器
     function ThreadDoCd(s)
     {
@@ -21,9 +54,14 @@
     }
 
 	//sing计时器
-    function TimeToDoSing(s)
+    function TimeToDoSing(t,o)
     {
-    	this.ss = s;
+    	this.obj=o;
+    	if (t >= obj.singtime)
+    	{
+    		return obj.dodamage();
+    	}
+    	/*this.ss = s;
         if (ss.ifcd)
         {
             clearTimeout(t2);
@@ -33,7 +71,7 @@
         $("big#time2").text(c);
         console.log();
         c=c+1;
-        t2=setTimeout("time2()",300);
+        t2=setTimeout("time2()",300);*/
     }
        
    	//技能类
@@ -50,6 +88,7 @@
 		this.mindamage = mindamage;		//最小伤害
 		this.maxdamage = maxdamage;		//最大伤害
 		this.crit=crit;		//暴击率
+		this.notAllowedStatus = new Array();		//限制释放的状态--释放技能是要与玩家移动状态和debuff列表比对是否有重复项，如果有就拒绝释放
         this.ifcd = true;
         this.Reset = function(){
             this.ifcd = true; 
@@ -59,7 +98,12 @@
 		this.t_docd;
 		this.t_dosing;
 		var self = this;
-		
+					
+		init = function()
+		{
+			self.notAllowedStatus	
+		}
+		init();
 		
 		//技能进入cd
         this.DoCd = function(obj)
@@ -81,7 +125,6 @@
 		//读条
 		this.dosing = function(obj)
 		{			
-			obj.DoCd(obj);
 			var _dmg = obj.dodamage(obj);
 			console.log("dosing return:" + _dmg);
 			
@@ -92,26 +135,33 @@
 		//技能释放主函数
 		this.domain = function(obj,player,target)
 		{
-			
-			if (obj.curcd <= 0)		//判断技能的当前cd是否合法
+			if (player.p_cast_status != castStatus.sing || player.p_cast_status == castStatus.gnis)
 			{
-				if ( player.mana >= obj.mana )		//判断技能的当前消耗mana是否合法
+				if (obj.curcd <= 0)		//判断技能的当前cd是否合法
 				{
-					console.log("obj.distance=" + obj.distance)
-					if ( obj.distance > (player.vector2[0] - target.vector2[0]) )	//判断技能的当前释放距离distance是否合法
+					if ( player.mana >= obj.mana )		//判断技能的当前消耗mana是否合法
 					{
-						if ( dmg = obj.dosing(obj))
+						console.log("obj.distance=" + obj.distance)
+						if ( obj.distance > (player.vector2[0] - target.vector2[0]) )	//判断技能的当前释放距离distance是否合法
 						{
-							obj.DoCd(obj);
-							return dmg;
+							if ( dmg = obj.dosing(obj) )
+							{
+								obj.DoCd(obj);
+								//return dmg;								
+								return 0;
+							}
+							else
+							{
+								
+							}							
+							self.t_dosing=setTimeout("clearTimeout(self.t_tosing);return dosing(obj);",obj.singtime*1000);
+							
+							return 0;
 						}
 						else
 						{
-							
+							return -4;
 						}
-						
-						self.t_dosing=setTimeout("clearTimeout(self.t_tosing);return dosing(obj);",obj.singtime*1000);
-						
 					}
 					else
 					{
@@ -140,15 +190,29 @@
 		this.maxmana = maxmana;
 		this.life = maxlife;
 		this.mana = maxmana;
-		this.skilllist = new Array();
+		this.gcdtime=1500;	//gcd
+		this.isSing = false;
 		this.vector2;
-		//增加技能
-		this.addskill = function(skill)
+		this.p_move_status = moveStatus.free;
+		this.p_cast_status = castStatus.none;
+		
+		this.skilllist = new Array();
+		this.bufflist = new Array();
+		
+		this.init = function()
 		{
-			skilllist.push(skill);
 			
 		}
-				
+		/*//增加技能
+		this.addskill = function(skill)
+		{
+			skilllist.push(skill);			
+		}*/
+		
+		this.ReSetGcd = function()
+		{
+			cur_gcd_t = 0;
+		}		
     }	
     
     function DoSkill(skill)
@@ -161,14 +225,16 @@
 			console.log(nowtime);
 			if (shvalue > 0)
 			{
-	            console.log("使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue);
-				var outstr = "使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue;
-				$("div#time2").text(outstr);
+	            var outstr = "使用了技能:"+skill.name+"\tCD:"+skill.cdtime+"|伤害为:"+shvalue;
+	            console.log(outstr);
+	            Tips(outstr);
+				//$("div#time2").text(outstr);
 			}
 			else
 			{
 				var outstr = "使用了技能:"+skill.name+"obj.curcd > 0";
-				$("div#time2").text(outstr);
+				 Tips(outstr);
+				//$("div#time2").text(outstr);
 				
 			}
         }
@@ -205,16 +271,29 @@
         progressbar.progressbar( "option", "value", false );
       } -->**/
 
+
+	//左下区域的文本提示显示
+	function Tips(str)
+	{
+//		_str = str;
+//		console.log("tips:-----------------------"  +  ($("textarea#textbox1").text()) + str);
+		$("textarea#textbox1").text( $("textarea#textbox1").text() + str+ "\r");
+		$("textarea").scrollTop($("textarea")[0].scrollHeight);//滚动到最后
+//		console.log()
+	}
+
 	function Start()
 	{
-		if (gameSwitch)
+		if (!gameSwitch)
     	{
+    		gameSwitch = true; 
     		Update();
     		console.log("开始游戏!")
     		return;
     	}
     	else
     	{
+    		gameSwitch = false;
     		clearTimeout(t);
     		console.log("停止/暂停游戏!")
     		return;
@@ -222,9 +301,23 @@
 	}
   	var gameSwitch = false;
 	//
+	var k = 1;
 	//第一阶段将所有UI元素的数据更新并刷新UI
+    	
+		//cur_gcd_t = 1500;
 	function Update()
     {
+    	k = k + 1;
+    	//console.log(cur_gcd_t/player.gcdtime*100)
+    	if (player.isSing)
+    	{
+    		TimeToDoSing(cur_sing_t);
+    		cur_sing_t = cur_sing_t + 40/1000;
+    	}
+      	if (cur_gcd_t != 0)
+      	{
+    		DoGCd();    		
+      	}
     	
     	t=setTimeout("Update()",40);
     }
