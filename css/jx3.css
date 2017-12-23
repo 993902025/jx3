@@ -1,9 +1,8 @@
 .top{
 	position: absolute;
-	top: 5px;  
-	left: 5px; 
-	right: 5px;
-	height: 0;
+	top: 0.5%;  
+	left: 0; 
+	right: 0;
 	margin: 5px 5px;
 	height: 20px;
 	border:1px dashed green;
@@ -13,12 +12,11 @@
 
 .left_top{
 	position: absolute;
-	top: 25px; 
-	left: 5px;
-	bottom: 50px;
+	top: 20px; 
+	left: 0;
 	margin: 5px 5px;
-	width:200px;
-	height: 150px;
+	width:20%;
+	height: 20%;
 	border:1px dashed green;
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
@@ -26,12 +24,12 @@
 
 .center_top{
 	position: absolute;	
-	top: 30px; 
-	left: 200px; 
-	right: 200px; 
-	height: 150px;
-	margin: auto;
+	top: 20px; 
+	left: 0; 
+	right: 0;
 	width:60%;
+	height: 20%;
+	margin: 5px auto;
 	border:1px dashed green;
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
@@ -40,12 +38,11 @@
 
 .right_top{
 	position: absolute;
-	top: 25px; 
-	right: 5px;
-	bottom: 50px;
+	top: 20px; 
+	right: 0;
 	margin: 5px 5px;
-	width:200px;
-	height: 150px;
+	width:20%;
+	height: 30%;
 	border:1px dashed green;
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
@@ -53,11 +50,11 @@
 
 .left{
 	position: absolute; 
-	top: 10%;
-	left: 5px;
-	bottom: 5%;
+	top: 20%;
+	left: 0;
 	margin: 5px 5px;
-	width: 200px;
+	width: 18%;
+	height: 40%;
 	border:1px dashed green;
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
@@ -66,24 +63,24 @@
 .center{
 	position: absolute;	
 	top: 10%;
-	left: 200px; 
-	right: 200px; 
+	left: 0%; 
+	right: 0%; 
 	bottom: 5%;
 	margin: auto;
 	width:60%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
 }
 
 .right{
 	position: absolute;
 	top: 10%;
-	right: 5px;
+	right: 0;
 	bottom: 5%;
 	margin: 5px 5px;
-	width:200px;
+	width:25%;
 	border:1px dashed green;
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
@@ -92,13 +89,49 @@
 
 .bottom{
 	position: absolute;	
-	left: 200px; 
-	right: 200px; 
-	bottom: 5%;
+	left: 25%; 
+	right: 25%; 
+	bottom: 20px;
 	margin: auto;
-	width:60%;
+	width:50%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(255, 255, 255,0.1);
+	background:rgba(255, 255, 255,0.0);
 	overflow: hidden;
+}
+
+.leftbottom{
+	position: absolute;
+	top:60%;
+	left: 0%;
+	bottom: 5%;
+	margin: 5px 5px;
+	width:22%;
+	border:1px dashed green;
+	text-align: center;
+	overflow: hidden;
+}
+
+.rightbottom{
+	position: absolute;
+	top:60%;
+	right: 5px;
+	bottom: 5%;
+	margin: 5px 5px;
+	width:22%;
+	border:1px dashed green;
+	text-align: center;
+	background:rgba(0, 255, 0,0.25);
+	overflow: hidden;
+}
+
+.textbox{
+	width: 98%;
+	height: 100%;
+	margin: 0 0 ;
+	text-align: left;
+	direction: ltr;
+	resize: none;
+	white-space: pre-line;/*去掉在html的中手动敲的的空格*/
+	background-color: rgba(255, 255, 255, 0.8);
 }
