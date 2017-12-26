@@ -89,9 +89,18 @@
 		</textarea>
 	</div>
     <div class="rightbottom" >
-		<div class="textbox"  autocomplete="off">
-			<p>111</p>
-			<p>222</p>
+		<div autocomplete="off" style="height:100%;border: 1px #000000 solid;box-sizing: border-box ;">
+			<div style="top:0;height:20px;margin:0;border: 1px #F1A899 solid;text-align: left;font-size: small;">伤害统计</div>
+			<div style="position:absolute;top:20px;left:0;right:0;bottom:0;margin:0;border: 1px #F1A899 solid;">
+				<div style="height: 15px;border: 2px #5F3F3F solid;">
+					<div id="dpsui" style="height:100%;width:0%;background: red;text-align: right;font-size: small;">(0.00%)
+					</div>
+				</div>
+				<!--<div style="height: 15px;border: 2px #5F3F3F solid;">
+					<progress style="top:0;bottom:0;left:0;height:100%;width:80%;background: red;text-align: right;font-size: small;" value="100" max="100">90</progress>
+				</div>-->
+			</div>
+			
 		</div>
 	</div>
     
@@ -101,6 +110,11 @@
 				开始
 			</button>
 		</div>
+		<div class="" id="btn_start" style="float: left;">
+			<button class="" type="button" onclick="Test()" >
+				Test
+			</button>
+		</div>
 	
 	</div>
 	<div class="left_top">左上预留区域</div>
@@ -108,7 +122,10 @@
 		<div></div>
 	</div>
 	<div class="right_top">右上预留区域</div>
-	<div class="left">左预留区域</div>	
+	<div class="left">左预留区域
+		<p>点击 ↑ 那个开始按钮来开始和暂停游戏</p>
+		<p>现在只有1 技能和 2 技能，其他都是调试的没用</p>
+	</div>
 	<div class="center">中预留区域</div>
 	<div class="right">右预留区域</div>	
 	<div class="bottom">
@@ -136,23 +153,23 @@
 				
 			</div>
 			<div class="skillbtn" id="btn3" style="float: left;">
-				<button class="skillbtn" type="button" onclick="TimeToTest()" >
+				<button class="skillbtn" type="button" onclick="" >
 					<img class="skillBtnImg" src="img/tjwj.png" id="skill_img_3" alt="test" ></img>
 					<div class="btnnum">3</div>
 				</button>
 			</div>
 			<div class="skillbtn" id="btn1" style="float: left;">
-				<button class="skillbtn" type="button" onclick="DoSkill(skill1)" >
+				<button class="skillbtn" type="button" onclick="" >
 					<img class="skillBtnImg" src="img/qxgy.png" id="skill_img_1" alt="Biu~" ></img>
 				</button>
 			</div>
 			<div class="skillbtn"  id="btn2" style="float: left;">
-				<button class="skillbtn" type="button" onclick="Update()" >
+				<button class="skillbtn" type="button" onclick="" >
 					<img class="skillBtnImg" src="./123.png" id="skill_img_2" alt="Biubiu~~" ></img>
 				</button>
 			</div>
 			<div class="skillbtn" id="btn3" style="float: left;">
-				<button class="skillbtn" type="button" onclick="TimeToTest()" >
+				<button class="skillbtn" type="button" onclick="" >
 					<img class="skillBtnImg" src="" id="skill_img_3" alt="Test2" ></img>
 				</button>
 			</div>
@@ -198,14 +215,17 @@
 			var target = new Player(0, "木桩", 100, 100, null);
 			player.vector2 = new Array(0,0);
 			target.vector2 = new Array(0,0);
-			console.log(player.id + "\t" + player.name+"\t生命:"+ player.life + "\t内力:" + player.mana + "\t "  + "|");
+//			console.log(player.id + "\t" + player.name+"\t生命:"+ player.life + "\t内力:" + player.mana + "\t "  + "|");
+			Tips("ID:" + player.id + "\r名称:" + player.name+"\r生命:"+ player.life + "\r内力:" + player.mana + "\t "  + "\r-----");
 			
 			//(id, name, cdtime, singtime, mindamage, maxdamage, crit)
-			var skill1=new Skill(1, "技能一", 1.5, 0, 83, 100, 0);	//四象轮回
-			var skill2=new Skill(1, "技能二", 3, 1, 10, 11, 0);		//两仪化形
+			var skill1=new Skill(1, "四象轮回", 1.5, 0, 100, 100, 0);	//四象轮回
+			var skill2=new Skill(1, "两仪化形", 3, 1, 100, 130, 0);		//两仪化形
 			var ifstart=false;
-			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
-			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
+//			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
+//			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
+			Tips(skill1.name+":\tCD:"+skill1.cdtime + "s\t吟唱时间:" + skill1.singtime + "s\t伤害:" + skill1.mindamage + "-" + skill1.maxdamage + "\n");	
+			Tips(skill2.name+":\tCD:"+skill2.cdtime + "s\t吟唱时间:" + skill2.singtime + "s\t伤害:" + skill2.mindamage + "-" + skill2.maxdamage + "\n");
 			 
 			$(document).ready(load())
 			function load()
