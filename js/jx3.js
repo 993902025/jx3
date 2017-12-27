@@ -54,37 +54,6 @@ function ThreadDoCd(s) {
 	});
 }
 
-//sing计时器
-function TimeToDoSing(singt, p) {
-	//this.skill = s;
-	this.player = p;
-	//this.target = tg;	
-	//console.log(singt + "?" + player.singtime)
-	//console.log("timetodosing:"+player.castingskill[0].name);
-	$("#singprogressbar").progressbar({
-		value: (cur_sing_t / player.castingskill[0].singtime * 100)
-	});
-	if(singt >= player.castingskill[0].singtime) {
-		_s = player.castingskill.shift(); 
-		_dmg = _s.dodamage();
-		player.isSing = false;
-		Tips("使用技能[" + _s.name + "] 对 \"" + player.target[0].name + "\"造成 " + _dmg + " 点伤害." );
-		
-		return _dmg;
-	}
-	/*this.ss = s;
-        if (ss.ifcd)
-        {
-            clearTimeout(t2);
-            c = 0;
-            return;
-        }
-        $("big#time2").text(c);
-        console.log();
-        c=c+1;
-        t2=setTimeout("time2()",300);*/
-}
-
 //技能类
 function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
 	this.id = id; //技能id
@@ -119,7 +88,7 @@ function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
 		obj.curcd = obj.cdtime;
 		console.log("当进入cd，curcd=" + obj.curcd);
 		ThreadDoCd(obj);
-		<!-- console.log("ifcd= "+obj.name+"|"+self.name); -->
+		//console.log("ifcd= "+obj.name+"|"+self.name);
 	};
 
 	//计算返回伤害
@@ -180,7 +149,75 @@ function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
 
 }
 
-//玩家类（）
+/**
+ * 伤害统计类
+ */
+function DmgCount()
+{
+	this.totaldmg = 0;
+	this.isfight = false;
+	this.fightstarttime;
+	this.fightendtime;
+	this.fighttime = 0;
+	this.startdmgsign = true;
+	this.dps;
+	this.maxdps;
+	
+	var self = this;
+	
+	self.fightstarttime = new Date();
+	console.log("千万别进来");
+	
+	this.ComputeFigthTime = function()
+	{
+		//self.fightstarttime = t1;
+		self.fightendtime = new Date();		//t2;		
+
+		self.fighttime = ((self.fightendtime).getTime()-(self.fightstarttime).getTime()) / 1000;
+		//console.log("战斗时间:" + self.fighttime + "=" + (self.fightendtime).getTime() + "-" + (self.fightstarttime).getTime() );	
+	}
+		
+	/**
+	 * 计算总场战斗总伤害
+	 */
+	this.counttotaldmg = function(v)
+	{
+		self.totaldmg = self.totaldmg + v;
+		//console.log("总伤害:" + self.totaldmg);
+	}
+	
+	/**
+	 * 计算总场战斗DPS
+	 */
+	this.countdps = function()
+	{
+		if ( self.fighttime < 0.2 )
+		{
+			self.dps = self.totaldmg;
+			self.dpsmax = self.dps;
+		}
+		else
+		{
+			self.dps = self.totaldmg/self.fighttime;
+		}
+		if ( self.dps > self.dpsmax )
+		{
+			self.dpsmax = self.dps;
+		}
+		_dpspercent = Math.round((self.dps / self.dpsmax * 10000)/100).toFixed(2);
+		//console.log("dps:" + self.dps);
+		//console.log("dps%:" + _dpspercent + "%");
+		$("#dpsui").css("width",_dpspercent+"%");
+		$("#dpsui").text(self.dps.toFixed(0) + "(" + _dpspercent + "%)");
+	}
+	
+	//this.maxdps = 
+		//return v/t;
+}
+
+/**
+ * 玩家类
+ */
 function Player(id, name, maxlife, maxmana, skilllist) {
 	this.id = id;
 	this.name = name;
@@ -193,11 +230,15 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 	this.vector2;
 	this.p_move_status = moveStatus.free;
 	this.p_cast_status = castStatus.none;
-
+	this.isfight = false;
+	this.totaldmg = 0;
+	
 	this.skilllist = new Array();
 	this.bufflist = new Array();
 	this.castingskill = new Array();
 	this.target = new Array();
+	this.dmgcountlist = new Array();
+	
 
 	var self = this;
 	this.init = function() {
@@ -214,6 +255,63 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 		cur_gcd_t = 0;
 	}
 
+	
+	/**
+	 * 计算伤害统计
+	 */
+	this.CountDmg = function(vdmg) {
+		if (!self.isfight)
+		{
+			console.log("由非战斗进战" + self.isfight);
+			self.isfight = true;
+			var dmgcount = new DmgCount();
+			self.dmgcountlist.push(dmgcount);
+		}
+		//console.log("dmgcounttime:" + self.dmgcountlist[0].fighttime + "and" + self.dmgcountlist[0].fighttime + "|||" + dmgcount);
+
+		self.dmgcountlist[0].ComputeFigthTime();
+		self.dmgcountlist[0].counttotaldmg(vdmg);
+		self.dmgcountlist[0].countdps();
+		
+	}
+		
+	
+	/**
+	 * 读条
+	 */
+	this. ToDoSing = function(singt) {
+		//self.slef = p;
+		//console.log(singt + "?" + self.singtime)
+		//console.log("timetodosing:"+self.castingskill[0].name);
+		$("#singprogressbar").progressbar({
+			value: (cur_sing_t / self.castingskill[0].singtime * 100)
+		});
+		if(singt >= self.castingskill[0].singtime) {
+			_s = self.castingskill.shift(); 
+			_dmg = _s.dodamage();
+			self.isSing = false;
+			Tips("使用技能[" + _s.name + "] 对 \"" + self.target[0].name + "\"造成 " + _dmg + " 点伤害." );
+			self.CountDmg(_dmg);
+			//return _dmg;
+		}
+		/*this.ss = s;
+	        if (ss.ifcd)
+	        {
+	            clearTimeout(t2);
+	            c = 0;
+	            return;
+	        }
+	        $("big#time2").text(c);
+	        console.log();
+	        c=c+1;
+	        t2=setTimeout("time2()",300);*/
+	}
+
+	
+	/**
+	 * 玩家施放技能
+	 * 技能, 目标
+	 */
 	this.CastSkill = function(skill, target) {
 		//	GetSkillList(); 从玩家的技能列表中获取对应的技能
 
@@ -231,9 +329,8 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 						self.castingskill[0] = skill;
 						//self.castingskill.push(skill);
 						self.target[0] = target;
-						TimeToDoSing(cur_sing_t, self);
+						self.ToDoSing(cur_sing_t);
 						//Tips("gcd=" + cur_gcd_t + " " + "singstatus=" + self.isSing + " " + "singt=" + cur_sing_t + " ");
-							
 						//self.t_dosing=setTimeout("clearTimeout(self.t_tosing);return dosing(skill);",skill.singtime*1000);							
 						return 0;
 					} else {
@@ -250,6 +347,8 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 			return -1;		//玩家状态非法
 		}
 	}
+	
+	
 }
 
 function DoSkill(skill) {
@@ -271,12 +370,14 @@ function DoSkill(skill) {
 		}
 	} else {
 		console.log(skill.name + "冷却中……");
-		var outstr = skill.name + "冷却中……"; <!-- + $("div#time".text());-->
+		var outstr = skill.name + "冷却中……"; // + $("div#time".text());
 		$("div#time2").text(outstr);
 	}
 }
 
-//快捷键<!-->加载and测试函数</!-->
+/**
+ * 快捷键
+ */
 $(document).keydown(function(e) {
 	if(e.which == 49) {
 		player.CastSkill(skill1, target);
@@ -308,7 +409,9 @@ $(document).keydown(function(e) {
         progressbar.progressbar( "option", "value", false );
       } -->**/
 
-//左下区域的文本提示显示
+/**
+ * 左下区域的文本提示显示
+ */
 function Tips(str) {
 	//		_str = str;
 	//		console.log("tips:-----------------------"  +  ($("textarea#textbox1").text()) + str);
@@ -317,12 +420,23 @@ function Tips(str) {
 	//		console.log()
 }
 
+function Test()
+{
+	var t1 = new Date();
+	
+	a = t1.getTime();
+	var t2 = new Date();
+	Tips(a);
+}
+
 function Start() {
 	if(!gameSwitch) {
 		gameSwitch = true;
-		Update();
+		var time = new Date();
+		console.log(time);
+		Update(time);
 		console.log("开始游戏!")
-		Tips("停止/暂停游戏!");
+		Tips("开始游戏!");
 		return;
 	} else {
 		gameSwitch = false;
@@ -334,21 +448,30 @@ function Start() {
 }
 var gameSwitch = false;
 //
-var k = 1;
+var k = 0;
 //第一阶段将所有UI元素的数据更新并刷新UI
 
 //cur_gcd_t = 1500;
-function Update() {
-	k = k + 1;
+function Update(lasttime) {
+	
+	this.thistime = new Date();;
+	
+	var str_t = this.thistime.getTime() - lasttime.getTime();
+	//console.log(str_t); 
+	var self = this;
 	//console.log(cur_gcd_t/player.gcdtime*100)
 	if( player.isSing ) {
-		TimeToDoSing(cur_sing_t, player);
+		player.ToDoSing(cur_sing_t);
 		cur_sing_t = cur_sing_t + 40 / 1000;
 	}
 	if(cur_gcd_t > 0) {		//gcd刷新
 		DoGcd();
 	}
 	//func  遍历玩家技能列表刷新各技能cd情况
-	
-	t = setTimeout("Update()", 40);
+	//伤害统计
+	if(player.isfight ){
+			player.dmgcountlist[0].ComputeFigthTime();
+			player.dmgcountlist[0].countdps();
+	}
+	t = setTimeout("Update(self.thistime)", 40);
 }
