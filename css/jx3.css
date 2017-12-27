@@ -19,7 +19,7 @@
 	height: 20%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 }
 
 .center_top{
@@ -32,7 +32,7 @@
 	margin: 5px auto;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
 }
 
@@ -57,7 +57,7 @@
 	height: 40%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 }
 
 .center{
@@ -83,7 +83,7 @@
 	width:25%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
 }
 
@@ -121,7 +121,7 @@
 	width:22%;
 	border:1px dashed green;
 	text-align: center;
-	background:rgba(0, 255, 0,0.25);
+	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
 }
 
@@ -130,8 +130,9 @@
 	height: 100%;
 	margin: 0 0 ;
 	text-align: left;
+	font-size: small;
 	direction: ltr;
 	resize: none;
 	white-space: pre-line;/*去掉在html的中手动敲的的空格*/
-	background-color: rgba(255, 255, 255, 0.8);
+	background-color: rgba(255, 255, 255, 0.5);
 }
