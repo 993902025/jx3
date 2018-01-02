@@ -5,7 +5,7 @@
 	right: 0;
 	margin: 5px 5px;
 	height: 20px;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
 }
@@ -17,7 +17,7 @@
 	margin: 5px 5px;
 	width:20%;
 	height: 20%;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.0);
 }
@@ -30,7 +30,7 @@
 	width:60%;
 	height: 20%;
 	margin: 5px auto;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
@@ -43,7 +43,7 @@
 	margin: 5px 5px;
 	width:20%;
 	height: 30%;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.25);
 }
@@ -68,7 +68,7 @@
 	bottom: 5%;
 	margin: auto;
 	width:60%;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
@@ -81,7 +81,7 @@
 	bottom: 5%;
 	margin: 5px 5px;
 	width:25%;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(0, 255, 0,0.0);
 	overflow: hidden;
@@ -94,7 +94,7 @@
 	bottom: 20px;
 	margin: auto;
 	width:50%;
-	border:1px dashed green;
+	/*border:1px dashed green;*/
 	text-align: center;
 	background:rgba(255, 255, 255,0.0);
 	overflow: hidden;
