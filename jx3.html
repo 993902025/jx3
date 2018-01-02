@@ -93,7 +93,8 @@
 			<div style="top:0;height:20px;margin:0;border: 1px #F1A899 solid;text-align: left;font-size: small;">伤害统计</div>
 			<div style="position:absolute;top:20px;left:0;right:0;bottom:0;margin:0;border: 1px #F1A899 solid;">
 				<div style="height: 15px;border: 2px #5F3F3F solid;">
-					<div id="dpsui" style="height:100%;width:0%;background: red;text-align: right;font-size: small;">(0.00%)
+					
+					<div id="dpsui" style="height:100%;width:0%;background: red;text-align: right;font-size: small;">
 					</div>
 				</div>
 				<!--<div style="height: 15px;border: 2px #5F3F3F solid;">
@@ -104,7 +105,19 @@
 		</div>
 	</div>
     
-	<div class="top">顶部预留区域
+	<div class="left_top">
+		<!--左上预留区域-->
+	</div>
+	<div class="center_top">
+		<!--中上预留区域-->
+		<div></div>
+	</div>
+	<div class="right_top">
+		<!--右上预留区域-->
+	</div>
+	
+	<div class="top">
+		<!--顶部预留区域-->
 		<div class="" id="btn_start" style="float: left;">
 			<button class="" type="button" onclick="Start()" >
 				开始
@@ -117,14 +130,11 @@
 		</div>
 	
 	</div>
-	<div class="left_top">左上预留区域</div>
-	<div class="center_top">中上预留区域
-		<div></div>
-	</div>
-	<div class="right_top">右上预留区域</div>
-	<div class="left">左预留区域
-		<p>点击 ↑ 那个开始按钮来开始和暂停游戏</p>
-		<p>现在只有1 技能和 2 技能，其他都是调试的没用</p>
+	<div class="left">
+		<!--左预留区域-->
+		使用说明
+		<p style="text-align: left;">点击 ↑ 那个开始按钮来开始和暂停游戏</p>
+		<p style="text-align: left;">现在只有1 技能和 2 技能，其他都是调试的没用</p>
 	</div>
 	<div class="center">中预留区域</div>
 	<div class="right">右预留区域</div>	
@@ -139,7 +149,7 @@
 			<div class="skillbtn" id="btn1" style="float: left;">
 				<button class="skillbtn" type="button" onclick="player.CastSkill(skill1, target)" >
 					<img class="skillBtnImg" src="img/sxlh.png" id="skill_img_1" alt="Biu~">
-					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.5);"></canvas>
+					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.1);"></canvas>
 					</img>
 					<div class="btnnum">1</div>
 				</button>
@@ -148,7 +158,7 @@
 				<button class="skillbtn" type="button" onclick="player.CastSkill(skill2, target)" >
 					<img class="skillBtnImg" src="img/lyhx.png" id="skill_img_2" alt="Biubiu~" />		
 					<div class="btnnum">2</div>
-					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.6);"></canvas>
+					<canvas class="" id="myCanvas" style="position:absolute;top:0%;left:0%;width:100%;height:100%;border:0px solid #000000;background-color: rgba(255,255,255,0.1);"></canvas>
 				</button>
 				
 			</div>
@@ -219,8 +229,8 @@
 			Tips("ID:" + player.id + "\r名称:" + player.name+"\r生命:"+ player.life + "\r内力:" + player.mana + "\t "  + "\r-----");
 			
 			//(id, name, cdtime, singtime, mindamage, maxdamage, crit)
-			var skill1=new Skill(1, "四象轮回", 1.5, 0, 100, 100, 0);	//四象轮回
-			var skill2=new Skill(1, "两仪化形", 3, 1, 100, 130, 0);		//两仪化形
+			var skill1=new Skill(1, "四象轮回", 0, 1.5, 100, 150, 0);	//四象轮回
+			var skill2=new Skill(1, "两仪化形", 3, 0, 150, 205, 0);		//两仪化形
 			var ifstart=false;
 //			console.log(skill1.name+"\tCD:"+skill1.cdtime + "\tsingtime:" + skill1.singtime + "\tmindamage:" + skill1.mindamage + "\tmaxdamage:" + skill1.maxdamage);	
 //			console.log(skill2.name+"\tCD:"+skill2.cdtime + "\tsingtime:" + skill2.singtime + "\tmindamage:" + skill2.mindamage + "\tmaxdamage:" + skill2.maxdamage);
