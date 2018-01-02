@@ -1,13 +1,16 @@
-//global
-
+//	global
 	var c=0
 	var t1,t2;
 	var t;		//主Update线程
 	var cur_cd_t = 0;		//当前cd
-	var cur_gcd_t = 0;	//当前gcd
-	var cur_sing_t = 0;
+	var cur_gcd_t = 0;		//当前gcd
+	var cur_sing_t = 0;		//当前读条时间
+	var definefps = 40;		//帧数？update刷新时间
 	
-//玩家移动状态
+
+/**
+ *	玩家移动状态 
+ */
 var moveStatus = {
 	free: 0,
 	stand: 1,
@@ -16,7 +19,10 @@ var moveStatus = {
 	run: 5,
 	jump: 6
 }
-//玩家施法状态
+
+/**
+ *	玩家施法状态 
+ */
 var castStatus = {
 	none: 0,
 	sing: 1,
@@ -31,7 +37,7 @@ function DoGcd(s) {
 		cur_gcd_t = 0;
 		//console.log(cur_gcd_t / player.gcdtime * 100)
 	}
-	cur_gcd_t = cur_gcd_t - 40;
+	cur_gcd_t = cur_gcd_t - definefps;
 		$("#gcdprogressbar").progressbar({
 		value: (cur_gcd_t / player.gcdtime * 100)
 	});
@@ -56,18 +62,18 @@ function ThreadDoCd(s) {
 
 //技能类
 function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
-	this.id = id; //技能id
-	this.name = name; //技能名
-	this.cdtime = cdtime; //CD
+	this.id = id; 				//技能id
+	this.name = name; 			//技能名
+	this.cdtime = cdtime; 		//调息时间
 	this.curcd = 0.0;
-	this.mana = 20;
-	this.distance = 20;
-	this.ifsing = true; //是否读条
-	this.singtime = singtime; //读条时间
-	this.mindamage = mindamage; //最小伤害
-	this.maxdamage = maxdamage; //最大伤害
-	this.crit = crit; //暴击率
-	this.notAllowedStatus = new Array(); //限制释放的状态--释放技能是要与玩家移动状态和debuff列表比对是否有重复项，如果有就拒绝释放
+	this.mana = 20;				//魔法消耗
+	this.distance = 20;			//施法距离
+	this.ifsing = true; 		//是否需要读条
+	this.singtime = singtime; 	//读条时间
+	this.mindamage = mindamage; 	//最小伤害
+	this.maxdamage = maxdamage; 	//最大伤害
+	this.crit = crit; 			//暴击率
+	this.notAllowedStatus = new Array(); 	//限制释放的状态--释放技能是要与玩家移动状态和debuff列表比对是否有重复项，如果有就拒绝释放
 	this.ifcd = true;
 	this.Reset = function() {
 		this.ifcd = true;
@@ -91,14 +97,20 @@ function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
 		//console.log("ifcd= "+obj.name+"|"+self.name);
 	};
 
-	//计算返回伤害
-	this.dodamage = function() {
+	/**
+	 * 计算返回伤害
+	 */
+	this.dodamage = function(p) {
+		
 		_vsh = Math.floor(Math.random() * (self.maxdamage - self.mindamage + 1) + self.mindamage);
+		
 		//console.log("dodamage():" + _vsh);
 		return _vsh;
 	}
 
-	//读条
+	/**
+	 * 目前的实现方式，不需要了；(原读条功能)
+	 */
 	this.dosing = function(obj) {
 		var _dmg = obj.dodamage(obj);
 		console.log("dosing return:" + _dmg);
@@ -107,7 +119,9 @@ function Skill(id, name, cdtime, singtime, mindamage, maxdamage, crit) {
 		//然后用这个去调读条UI的函数
 	}
 
-	//技能释放主函数
+	/**
+	 * 目前的实现方式，不需要了，(原技能释放主函数)
+	 */
 	this.domain = function(obj, player, target) {
 		if(player.p_cast_status != castStatus.sing || player.p_cast_status == castStatus.gnis) {
 			if(obj.curcd <= 0) //判断技能的当前cd是否合法
@@ -166,7 +180,6 @@ function DmgCount()
 	var self = this;
 	
 	self.fightstarttime = new Date();
-	console.log("千万别进来");
 	
 	this.ComputeFigthTime = function()
 	{
@@ -174,7 +187,8 @@ function DmgCount()
 		self.fightendtime = new Date();		//t2;		
 
 		self.fighttime = ((self.fightendtime).getTime()-(self.fightstarttime).getTime()) / 1000;
-		//console.log("战斗时间:" + self.fighttime + "=" + (self.fightendtime).getTime() + "-" + (self.fightstarttime).getTime() );	
+		//console.log("战斗时间:" + self.fighttime + "=" + (self.fightendtime).getTime() + "-" + (self.fightstarttime).getTime() );
+		return self.fighttime;
 	}
 		
 	/**
@@ -205,10 +219,10 @@ function DmgCount()
 			self.dpsmax = self.dps;
 		}
 		_dpspercent = Math.round((self.dps / self.dpsmax * 10000)/100).toFixed(2);
-		//console.log("dps:" + self.dps);
 		//console.log("dps%:" + _dpspercent + "%");
-		$("#dpsui").css("width",_dpspercent+"%");
-		$("#dpsui").text(self.dps.toFixed(0) + "(" + _dpspercent + "%)");
+		$("#dpsui").css("width",100+"%");		//后续用到多人的时候可能用来计算不同玩家之间的输出比来调整宽度
+		//$("#dpsui").text(self.dps.toFixed(0) + "(" + _dpspercent + "%)" +);
+		$("#dpsui").text(self.dps.toFixed(0) + "DPS\t(" + self.totaldmg + ")");
 	}
 	
 	//this.maxdps = 
@@ -219,26 +233,28 @@ function DmgCount()
  * 玩家类
  */
 function Player(id, name, maxlife, maxmana, skilllist) {
-	this.id = id;
-	this.name = name;
-	this.maxlife = maxlife;
-	this.maxmana = maxmana;
-	this.life = maxlife;
-	this.mana = maxmana;
-	this.gcdtime = 1500; //gcd
-	this.isSing = false;
-	this.vector2;
-	this.p_move_status = moveStatus.free;
-	this.p_cast_status = castStatus.none;
-	this.isfight = false;
-	this.totaldmg = 0;
+	this.id = id;				//玩家id;唯一
+	this.name = name;			//玩家名称;
+	this.maxlife = maxlife;		//生命上限;
+	this.maxmana = maxmana;		//魔法上限;
+	this.life = maxlife;		//当前生命值;
+	this.mana = maxmana;		//当前魔法值;
+	this.gcdtime = 1500; 		//GCD;
+	this.isSing = false;		//是否读条状态;
+	this.vector2;				//玩家当前二维坐标
+	this.p_move_status = moveStatus.free;			//玩家移动状态
+	this.p_cast_status = castStatus.none;			//玩家施法状态
+	this.isfight = false;		//是否进战状态;
+	this.totaldmg = 0;			//
 	
-	this.skilllist = new Array();
-	this.bufflist = new Array();
-	this.castingskill = new Array();
-	this.target = new Array();
-	this.dmgcountlist = new Array();
-	
+	this.attributelist = new Array();
+	this.skilllist = new Array();		//技能列表
+	this.bufflist = new Array();		//Buff列表
+	this.castingskill = new Array();	//施放的技能队列;
+	this.target = new Array();			//目标列表;
+	this.dmgcountlist = new Array();	//伤害统计列表,每次新进战时插入,为了以后可能需要历史战斗记录;
+	this.dmglist = new Array();			//伤害列表,每次伤害的进入,为了以后可能需要历史战斗记录;
+	this.outfighttimenum = 0;				//脱离战斗倒计时计数
 
 	var self = this;
 	this.init = function() {
@@ -259,18 +275,36 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 	/**
 	 * 计算伤害统计
 	 */
-	this.CountDmg = function(vdmg) {
-		if (!self.isfight)
+	this.CountDmg = function() {
+		
+		if (self.dmglist.length > 0)
 		{
-			console.log("由非战斗进战" + self.isfight);
-			self.isfight = true;
-			var dmgcount = new DmgCount();
-			self.dmgcountlist.push(dmgcount);
+			if (!self.isfight)
+			{
+				self.isfight = true;
+				console.log("进入战斗" + self.isfight);
+				Tips("---进入战斗！---");
+				var dmgcount = new DmgCount();
+				self.dmgcountlist.push(dmgcount);
+			}			
+			//console.log("dmgcounttime:" + self.dmgcountlist[0].fighttime + "and" + self.dmgcountlist[0].fighttime + "|||" + dmgcount);
+			self.dmgcountlist[0].counttotaldmg(self.dmglist.shift());
+			self.outfighttimenum = 0;
+			
 		}
-		//console.log("dmgcounttime:" + self.dmgcountlist[0].fighttime + "and" + self.dmgcountlist[0].fighttime + "|||" + dmgcount);
-
-		self.dmgcountlist[0].ComputeFigthTime();
-		self.dmgcountlist[0].counttotaldmg(vdmg);
+		else
+		{			
+			self.outfighttimenum = self.outfighttimenum + 1;
+			//console.log("outfighttimenum:" + self.outfighttimenum * 40);
+			if ( self.outfighttimenum * definefps > 8000 )
+			{
+				console.log("脱离战斗！")
+				Tips("---脱离战斗！---");
+				self.isfight = false;
+				self.outfighttimenum = 0;
+			}
+		}
+		self.dmgcountlist[0].ComputeFigthTime();		
 		self.dmgcountlist[0].countdps();
 		
 	}
@@ -288,10 +322,11 @@ function Player(id, name, maxlife, maxmana, skilllist) {
 		});
 		if(singt >= self.castingskill[0].singtime) {
 			_s = self.castingskill.shift(); 
-			_dmg = _s.dodamage();
+			_dmg = _s.dodamage(self);
 			self.isSing = false;
 			Tips("使用技能[" + _s.name + "] 对 \"" + self.target[0].name + "\"造成 " + _dmg + " 点伤害." );
-			self.CountDmg(_dmg);
+			self.dmglist.push(_dmg);
+			self.CountDmg();
 			//return _dmg;
 		}
 		/*this.ss = s;
@@ -462,7 +497,7 @@ function Update(lasttime) {
 	//console.log(cur_gcd_t/player.gcdtime*100)
 	if( player.isSing ) {
 		player.ToDoSing(cur_sing_t);
-		cur_sing_t = cur_sing_t + 40 / 1000;
+		cur_sing_t = cur_sing_t + definefps / 1000;
 	}
 	if(cur_gcd_t > 0) {		//gcd刷新
 		DoGcd();
@@ -470,8 +505,7 @@ function Update(lasttime) {
 	//func  遍历玩家技能列表刷新各技能cd情况
 	//伤害统计
 	if(player.isfight ){
-			player.dmgcountlist[0].ComputeFigthTime();
-			player.dmgcountlist[0].countdps();
+		player.CountDmg();
 	}
-	t = setTimeout("Update(self.thistime)", 40);
+	t = setTimeout("Update(self.thistime)", definefps);
 }
